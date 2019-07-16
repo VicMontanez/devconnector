@@ -1,1 +1,1 @@
-//Traversy Dev Connector MERN staclk tutorial
+//Traversy Dev-Connector MERN stack tutorial

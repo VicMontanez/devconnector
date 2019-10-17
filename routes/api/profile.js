@@ -38,6 +38,12 @@ router.get(
   }
 );
 
+//@route    GET api/profile/handle/:handle
+//@desc     Get profile by handle
+//@access   Public
+
+router.get('/');
+
 //@route    POST api/profile
 //@desc     Create or Edit user profile
 //@access   Private

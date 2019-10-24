@@ -170,8 +170,41 @@ router.post(
               .json({ alreadyloved: "user already loved this post" });
           }
 
-          //Add user id to likes array
+          //Add user id to loves array
           post.loves.unshift({ user: req.user.id });
+
+          //save it to db
+          post.save().then(post => res.json(post));
+        })
+        .catch(err => res.status(404).json({ postnotfound: "No post found " }));
+    });
+  }
+);
+
+//@route    POST api/posts/shocked.:id
+//@desc     React shocked post
+//@access   Private
+router.post(
+  "/shock/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      Post.findById(req.params.id)
+        .then(post => {
+          //Check to see if user already responded shock to a post
+          if (
+            post.shocked.filter(shock => shock.user.toString() === req.user.id)
+              .length > 0
+          ) {
+            return res
+              .status(400)
+              .json({
+                alreadyshocked: "user already reacted shocked to this post"
+              });
+          }
+
+          //Add user id to likes array
+          post.shocked.unshift({ user: req.user.id });
 
           //save it to db
           post.save().then(post => res.json(post));

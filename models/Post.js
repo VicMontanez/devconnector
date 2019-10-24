@@ -25,6 +25,30 @@ const PostSchema = new Schema({
       }
     }
   ],
+  laughs: [
+    {
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: "users"
+      }
+    }
+  ],
+  loves: [
+    {
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: "users"
+      }
+    }
+  ],
+  shocked: [
+    {
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: "users"
+      }
+    }
+  ],
   comments: [
     {
       user: {

@@ -250,6 +250,44 @@ router.post(
   }
 );
 
+//@route    POST api/posts/unlove.:id
+//@desc     unlove post
+//@access   Private
+router.post(
+  "/unlove/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      Post.findById(req.params.id)
+        .then(post => {
+          //Check to see if user already loved post
+          if (
+            post.loves.filter(love => love.user.toString() === req.user.id)
+              .length === 0
+          ) {
+            return res
+              .status(400)
+              .json({ notloved: "You have not yet loved this post" });
+          }
+
+          //Get remove index
+          const removeIndex = post.loves
+            .map(item => item.user.toString())
+            .indexOf(req.user.id);
+
+          //Splice it out of array
+          post.loves.splice(removeIndex, 1);
+
+          //Save
+          post.save().then(post => res.json(post));
+        })
+        .catch(err => res.status(404).json({ postnotfound: "No post found " }));
+    });
+  }
+);
+
+
+
 //@route    POST api/posts/comment/:id
 //@desc     Add comment to post
 //@access   Private
